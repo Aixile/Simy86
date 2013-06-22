@@ -1,0 +1,65 @@
+.pos 0
+init:
+    irmovl Stack, %esp
+    irmovl Stack, %ebp
+    jmp Main
+
+
+Main:
+    irmovl N, %ecx          # &N
+    mrmovl 0(%ecx),%ecx     # N
+    pushl %ecx              
+    call Fibo               # fibo(N)
+    halt
+
+Fibo:   # f(i)
+    pushl %ebp
+    rrmovl %esp,%ebp
+
+    irmovl $4,%eax
+	subl %eax,%esp           # space for sum
+
+    xorl %eax,%eax
+    rmmovl %eax,-4(%ebp)    # sum = 0
+    
+    mrmovl 8(%ebp),%ecx     
+    irmovl $2,%eax
+	subl %eax,%ecx          
+    jge L1                  # if i-2>=0 goto L2
+
+L0: 
+    irmovl $1,%eax          # else return 1
+    jmp End
+
+L1: 
+    mrmovl 8(%ebp),%ecx     
+    irmovl $1,%eax
+	subl %eax,%ecx           # ecx = i-1
+    pushl %ecx               
+    call Fibo               # eax = fib(i-1)
+    popl %ecx
+    rmmovl %eax,-4(%ebp)    # save to sum
+   
+    mrmovl 8(%ebp),%ecx     
+    irmovl $2,%eax
+	subl %eax,%ecx         
+    pushl %ecx               
+    call Fibo               # eax = fib(i-2)
+    popl %ecx
+    mrmovl -4(%ebp),%esi    
+    addl %esi,%eax          #
+
+End:
+    irmovl $4,%edx
+	addl %edx,%esp           # memory for sum
+    
+    rrmovl %ebp,%esp
+    popl %ebp
+    ret
+
+# vars
+N:  .long $23
+
+# stack
+.pos 0x400
+Stack:

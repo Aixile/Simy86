@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="y86sim">
+    <file>bg/bg.png</file>
+    <file>icon/player_fwd.png</file>
+    <file>icon/player_rew.png</file>
+    <file>icon/gtk-media-next-ltr.png</file>
+    <file>icon/gtk-media-next-rtl.png</file>
+    <file>icon/gtk-media-pause.png</file>
+    <file>icon/gtk-media-play-ltr.png</file>
+    <file>icon/gtk-media-stop.png</file>
+    <file>icon/gtk-refresh.png</file>
+  </qresource>
+</RCC>

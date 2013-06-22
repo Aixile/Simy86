@@ -1,0 +1,128 @@
+\documentclass[a4paper,12pt]{article}
+
+%%%%%Config Begin%%%%%
+%基本宏包与数学宏包
+\usepackage[CJKnumber,slantfont,boldfont]{xeCJK} % XeCJK 中日韩文支持
+\usepackage{latexsym,amsmath,amssymb,amscd,amsthm,amsfonts} % AMS数学库支持 
+\usepackage{mathrsfs} % 英文花体字支持
+\usepackage{bm} % 数学公式粗体显示支持
+\usepackage{relsize} % 调整数学公式字体大小：\mathsmaller, \mathlarger
+\usepackage{graphicx} % 插图支持
+
+%版面控制宏包
+\usepackage{geometry}\geometry{left=3cm,right=3cm,top=3.5cm,bottom=3.5cm} % 基本版面控制
+\usepackage{indentfirst} % 所有段落首行缩进
+\usepackage{titlesec} %标题控制
+\usepackage{titling} %标题，作者，日期对齐控制
+\usepackage{titletoc} %目录控制
+\usepackage{setspace} %行间距控制
+\usepackage{booktabs} %表格中加下滑线
+\usepackage{fancyhdr} %页眉页脚控制
+\usepackage[perpage,symbol]{footmisc} % 脚注控制
+\usepackage[colorlinks,linkcolor=red,anchorcolor=blue,citecolor=green]{hyperref} % 链接控制
+\setlength{\skip\footins}{0.5cm} % 脚注与正文的距离
+\usepackage{makeidx} % 建立索引
+
+%中日英字体设置
+\usepackage{fontspec,xunicode,xltxtra} % XeLaTeX相关字体字库
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt 
+%中文字体
+\newfontfamily\adbh{Adobe Heiti Std} % Adobe黑体 
+\newfontfamily\adbs{Adobe Song Std} % Adobe 宋体 
+\newfontfamily\adbfs{Adobe Fangsong Std} % Adobe 仿宋 
+\newfontfamily\adbk{Adobe Kaiti Std} % Adobe 楷体 
+%日文字体
+\newfontfamily\adbgtc{Adobe Gothic Std} % Adobe ゴシック
+\newfontfamily\adbmj{Adobe Myungjo Std} % Adobe 明朝
+%英文字体
+\newfontfamily\cnew{Courier New} % Courier New
+\newfontfamily\tnr{Times New Roman} % Times New Roman
+%字体大小
+\newcommand{\fthree}{\fontsize{16pt}{24pt}\selectfont}      % 三号, 1.5倍行距
+\newcommand{\ffour}{\fontsize{14pt}{21pt}\selectfont}       % 四号, 1.5倍行距
+\newcommand{\ffoursmall}{\fontsize{12pt}{18pt}\selectfont}      % 小四, 1.5倍行距
+\newcommand{\ffive}{\fontsize{10.5pt}{10.5pt}\selectfont}   % 五号, 单倍行距
+%默认字体设置
+\setCJKmainfont[BoldFont=Adobe Heiti Std]{Adobe Fangsong Std} % 设置默认CJK字体
+\setCJKmonofont{Adobe Song Std} % 设置等宽CJK字体
+\setmainfont{Times New Roman} % 设置默认英文字体
+\setmonofont{Courier New} % 设置等宽英文字体
+
+%自定义环境与命令
+\renewcommand{\contentsname}{\center\adbh{\fthree{目录}}}
+\titleformat{\section}{\raggedright\Large\bf}{\CJKnumber{\thesection}.}{1em}{}
+\preauthor{\begin{flushright}} % 作者右对齐
+\postauthor{\end{flushright}}
+\predate{\begin{flushright}} % 日期右对齐
+\postdate{\end{flushright}}
+
+\dottedcontents{chapter}[0.0em]{\vspace{0.5em}}{0.0em}{5pt}
+\dottedcontents{section}[1.16cm]{}{1.8em}{5pt}
+\dottedcontents{subsection}[2.00cm]{}{2.7em}{5pt}
+\dottedcontents{subsubsection}[2.86cm]{}{3.4em}{5pt}
+%%%%%End of Config %%%%%
+
+\title{\bf\LARGE{Simy86 User manual}}
+\author{金阳华}
+
+\begin{document}
+
+\maketitle
+\vspace{1.25cm}
+\tableofcontents
+\newpage
+
+\section{概述}
+\subsection{简介}
+Simy86是一个简单易用的y86流水线处理价格的一个模拟器。你可以在上面运行任何你所想的y86程序代码，并观察每一步cpu内部的状态。
+\subsection{运行环境}
+Simy86使用VS2012和Qt5.0.2写成。
+
+
+运行Simy86至少需要2GB以上的内存空间和64位的Windows Vista/7/8 系统，并且显示器的分辨率大于1024*576。
+\subsection{安装}
+Simy86不会写入任何的注册表信息，直接将Simy86的根文件夹拷贝至任何你想要的位置即可。
+\subsection{运行}
+点击simy86.exe即可开始运行。
+\subsection{对y86程序的限制}
+为了能迅速的让使用者快速跳至任何状态，并了解此刻的执行情况。Simy86运行时会先预处理出整个程序的所以指令周期的状态，并将这些状态逐一存下，这导致Simy86无法处理死循环或者指令周期过长的程序。Simy86默认将最大执行指令周期数设为5000000。
+\subsection{对内存寻址的限制}
+虽然Simy86实现了理论上可以对任意32位地址的快速寻址，但作者有意加上了一些限制，将内存寻址范围设置为0x0~0x7FFFFFFF，共31位的地址空间。对超出此范围的寻址请求会报内存错误。
+\newpage
+\section{运行}
+\subsection{编译}
+Simy86自带了一个编译器。你可以点开左上File，选择Compile (use simyas)，之后会跳出选择Y86汇编源文件的对话框，选择你想编译的.ys文件，即可在同目录下产生一个同名的.yo文件。
+
+
+如果成功编译，命令行窗口会返回成功的信息，否则会报错，错误信息中会显示编译器在哪行发现错误。
+
+
+因为simyas不能支持/**/格式的注释，我们还提供了一个windows下使用cygwin编译的yas编译器，你可以通过选择Compile (use yas)进行调用。
+\subsection{开始执行}
+点击左上角的File，选择Open，选择一个你想执行的.yo文件，即可开始运行，运行结束后，Simy86会将执行结果反馈给你。主界面右下角的数字为当前指令周期/总指令周期数。
+\subsection{播放/暂停}
+点击左上角的播放按钮即可自动进行每一个指令周期的播放显示。再按下即可暂停，程序在播放到程序尾时会自动停止。
+\subsection{改变播放速度}
+通过调整右上角的滑动条或者直接修改旁边输入栏内数值，可以实现改变程序的播放速度。允许播放速度的范围为0.1Hz到20Hz。
+\subsection{前进/后退}
+点击左上角的前进/后退按钮可以实现对播放的指令周期进行前进/后退。
+\subsection{跳至起始/跳至结尾}
+点击左上角的跳至结尾和跳至最后按钮可以实现将当前指令周期跳至起始周期或者跳至终止周期。
+\subsection{跳至任意周期}
+直接修改右下角的当前指令周期的值即可实现跳转至任意指令周期。
+
+
+\newpage
+\section{查看运行信息}
+\subsection{查看寄存器变量}
+通过打开view中的Register CC 窗口（默认打开），可以查看当前指令周期的寄存器变量。
+\subsection{查看代码}
+通过打开view中的source code 窗口（默认打开），可以查看执行的代码。并且会用5种不同的颜色高亮显示5个流水线阶段所执行的代码。
+\subsection{查看内存}
+通过打开view中的memory watcher窗口（默认打开),可以调出查看内存信息的窗口。输入开始地址和结束地址后，点击此窗口中刷新按钮，即可以8个Byte一行的形式显示这段连续内存中的数据。要注意的是此窗口中的数据不会知道更新。用户必须手动按刷新按钮才能更新。
+\subsection{保存运行信息}
+点击File中的save log 即可储存下此次模拟器执行的每个阶段的流水线寄存器中的信息。
+
+
+\end{document}
